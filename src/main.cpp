@@ -60,8 +60,8 @@ public:
     while(itt0 != grid.result_map.end())
     {
         Eigen::Vector3f position = grid.GetPositionByindex(itt0->first);
-        pointcloud_common::KEY key(floor(position[0] / grid.resolution[0]), floor(position[1] / grid.resolution[1]),
-                                   floor(itt0->second.totalpoints.rbegin()->first / grid.resolution[2]) );
+        pointcloud_common::KEY key((int16_t) (position[0] / grid.resolution[0]), (int16_t)(position[1] / grid.resolution[1]),
+                                   (int16_t)(itt0->second.totalpoints.rbegin()->first / grid.resolution[2]) );
         pointcloud_common::grid_feature feature;
         feature.minheight = 0;
         feature.maxheight = itt0->second.totalpoints.rbegin()->first;
@@ -71,7 +71,8 @@ public:
         ++itt0;
         feat.insert(std::pair<pointcloud_common::KEY, pointcloud_common::grid_feature>(key, feature));
     }
-//    pointcloud_common::ClusterRegionExpand::grid_grouping(Eigen::Vector3i(2,2,2), 3, feat, Eigen::Vector3f(24,200,40),grid.result_map, grid.resolution );
+    std::cout << feat.size() << "  compare  " << grid.result_map.size() << std::endl;
+    pointcloud_common::ClusterRegionExpand::grid_grouping(Eigen::Vector3i(2,2,2), 3, feat, Eigen::Vector3f(24,200,40),grid.result_map, grid.resolution );
 //    pointcloud_common::Feature_map feat = grid.GetFeatuerMap();
     std::unordered_map<int, pointcloud_common::pointfeature > ::iterator  itt = grid.result_map.begin();
     double end = ros::Time::now().toSec();
@@ -84,6 +85,12 @@ public:
        pointclouds.points.push_back(point);
        ++itt2;
     }
+//    pointcloud_common::pointcloud_t pointclouds;
+//    for(int i = 0; i < points.points.size(); i++)
+//    {
+//       pointcloud_common::point_type point( points.points[i].x,points.points[i].y, points.points[i].z, points.points[i].intensity);
+//       pointclouds.points.push_back(point);
+//    }
     sensor_msgs::PointCloud2 pointsc;
     Ros_receive_publish::ros_publish_common::pubcloud_fill(pointsc, "daa_link", 16, (float*)pointclouds.points.data(), pointclouds.points.size());
     pub2.publish(pointsc);
@@ -105,7 +112,7 @@ public:
 //    Ros_receive_publish::ros_publish_common::pubcloud_fill(pub_boundingbox_points, "daa_link", 16, bboxdata.data(), bboxdata.size() / 4.0);
 //    pub5.publish(pub_boundingbox_points);
 //    pub.publish(pub_points);
-    cout << "i heared rspoints  "<< end - start <<" size " <<pose[0] / 3.14 * 180.0 << endl;
+//    cout << "i heared rspoints  "<< end - start <<" size " <<pose[0] / 3.14 * 180.0 << endl;
     ///////////////////////////////////////////////////////////////
     
   }

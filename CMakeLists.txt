@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(pre_takeoff_warning)
+project(landing_warning)
 set(DCMAKE_BUILD_TYPE =Debug )
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -31,20 +31,21 @@ ENDIF()
 INCLUDE_DIRECTORIES(
         ${catkin_INCLUDE_DIRS}
         include/
-        ./pre_takeoff_warning_algo/include
+        ./landing_warning_algo/include
 )
 
 link_directories(src/)
 
 add_executable(
-                   pre_takeoff_warning
+                   landing_warning
                    src/main.cpp
                    src/motion_state.cpp
-                  ./pre_takeoff_warning_algo/pointcloud_common.cpp
-        pre_takeoff_warning_algo/LandingDetection.cpp pre_takeoff_warning_algo/include/LandingDetection.h)
- target_link_libraries(pre_takeoff_warning
+                  ./landing_warning_algo/pointcloud_common.cpp
+                  landing_warning_algo/LandingDetection.cpp
+                  landing_warning_algo/include/LandingDetection.h)
+ target_link_libraries(landing_warning
    ${catkin_LIBRARIES}
    ${PCL_LIBRARIES}
  )
-add_dependencies(pre_takeoff_warning lidar_detection_generate_messages_cpp)
+add_dependencies(landing_warning lidar_detection_generate_messages_cpp)
 
